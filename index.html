@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta charset="UTF-8">
+    <meta charset="UTF-8">
   	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Tablas</title>
@@ -10,47 +9,52 @@
 	<!-- jQuery and JS bundle w/ Popper.js -->
 	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="estilo.css">
-    
+    <link rel="stylesheet" href="estilo.css">    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+    <script src="https://raw.githack.com/eKoopmans/html2pdf/master/dist/html2pdf.bundle.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
 </head>
-<script src="https://www.gstatic.com/firebasejs/7.2.0/firebase.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.2.1/firebase.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-analytics.js"></script>
  <body style="background-color:#424242;"><!Agregamos el cuerpo de la pagina y añadimos un color de fondo>
  	<div id="contenedor"><!Agregamos varias divisiones que nos serviran como secciones para dividir la pagina>
 	 	<div id="header"><!Estas divisiones son integradas con un id referente para ser modificado en medida y color con ayuda de Css>	 
 	 	<h1 align="center">Gestion de alumnos</h1>
 	 	</div>
+        <fieldset></fieldset>
+            <Legend><h4>Introduce los datos del estudiante</h4></Legend>
+                <div id="form">
+                    <div id="datos1" style=" ">
+                    <label >Matricula:</label>
+                    <input type="text" placeholder="16520" id="matricula">
+                    <br>
+                    <label >Nombre:</label>
+                    <input type="text" placeholder="Juan" id="nombre">
+                    <input class="btn btn-success" id="boton" type="button" value="Buscar" onclick="buscar()">
+                    </div>
+                    <div id="datos2" style=" ">
+                    <label >Edad:</label>
+                    <input type="text" placeholder="99" id="edad"><br>
+                    <label >Promedio:</label>
+                    <input type="text" placeholder="100" id="promedio">
+                    </div>
+                    <div id="datos3" style=" ">
+                    <label >Sexo:</label>
+                    <input type="text" placeholder="H/M" id="sexo"></br>
+                    <input class="btn btn-info" id="botonRegistrar" type="button" value="Registrar" onclick="decidirinsertar()">
+                    </div>
+                    <div id="datos4" style="display: none;">
+                    <input class="btn btn-danger" id="botonModificar" type="button" value="Modificar" onclick="decidiractualizar()">
+                    </div>
+                    <input class="btn btn-warning" id="boton1" type="button" value="Mostrar todo" onclick="mostrart()">
+                    <br>
+                        <label id="total">El total de alumnos es: </label>
+                        <label id="prom">El promedio total es: </label>  
+                        <input class="btn btn-danger" id="botonPdf" type="button" value="Generar pdf" onclick="pdf()">
+                </div>
 	 	<div id="contenido"><!Colocamos el contenedor que contendra las tablas>
-	 		<fieldset></fieldset>
-	 		<Legend><h4>Introduce los datos del estudiante</h4></Legend>
-		 		<div id="form">
-		 			<div id="datos1" style=" ">
-			 		<label >Matricula:</label>
-			 		<input type="text" placeholder="16520" id="matricula">
-			 		<br>
-			 		<label >Nombre:</label>
-		            <input type="text" placeholder="Juan" id="nombre">
-		            <input class="btn btn-success" id="boton" type="button" value="Buscar" onclick="buscar()">
-			 		</div>
-			 		<div id="datos2" style=" ">
-		            <label >Edad:</label>
-		            <input type="text" placeholder="99" id="edad"><br>
-		            <label >Promedio:</label>
-		            <input type="text" placeholder="100" id="promedio">
-		            </div>
-		            <div id="datos3" style=" ">
-		            <label >Sexo:</label>
-		            <input type="text" placeholder="H/M" id="sexo"></br>
-		            <input class="btn btn-info" id="botonRegistrar" type="button" value="Registrar" onclick="decidirinsertar()">
-		            </div>
-		            <div id="datos4" style="display: none;">
-		            <input class="btn btn-danger" id="botonModificar" type="button" value="Modificar" onclick="decidiractualizar()">
-		            </div>
-		            <input class="btn btn-warning" id="boton1" type="button" value="Mostrar todo" onclick="mostrart()">
-		            <br>
-		            	<label id="total">El total de alumnos es: </label>
-		            	<label id="prom">El promedio total es: </label>  
-		            	 
-		 		</div>
 	 		<div id="cont1"><!Colocamos una division para la tabla de hombres>
 			 	<table  id = 'tab1' name="tabla1" class="table table-striped table-dark" style="text-align:center;" border="1"><!Creamos una tabla>
 						<tr class=bg-info>
@@ -84,11 +88,26 @@
 				</table>
 			</div>
 		</div>
+        <div id="graficas">
+            <div class="g1">
+                <h4>Grafica de alumnos</h4>
+                <canvas style="border: 2px solid brown; width: 300px; height: 200px; background-color: #ffffff" id="lienzo"></canvas>
+            </div>
+            <div class="g2">
+                <h4>Grafica de promedios</h4>
+                <canvas style="border: 2px solid brown; width: 300px; height: 200px; background-color: #ffffff" id="lienzo2"></canvas>
+            </div>
+        </div>
 	</div>
  </body>
  <script>
   cont = 0;
   pro = 0;
+  pro2 = 0;
+  hom = 0;
+  muj = 0;
+  ph = 0;
+  pm = 0;
   var firebaseConfig = {
     apiKey: "AIzaSyBoO7Ig7vUG2tFRFHiuvTiaZ_xCHsxSqQg",
     authDomain: "crud-19a8d.firebaseapp.com",
@@ -105,6 +124,67 @@
 
   cargarTabla();
   cargarTabla1();
+  
+  function pdf(){
+    var co= document.getElementById("graficas");
+    html2pdf()
+    .set({
+        scale: 0,
+        margin:0.0,
+        filename: "Reporte",
+        jsPDF:{
+            unit: "in",
+            format: "a3",
+            orientation: "portrait"
+        }
+    })
+    .from(co)
+    .save();
+  }
+  function graf(h, m){
+    var c = document.getElementById("lienzo");
+    var chart = new Chart(c, {
+        type:"pie", 
+        data:{
+            labels:["Mujeres", "Hombres"],
+            datasets:[{
+                label:"Alumnos",
+                data:[m, h],
+                backgroundColor:[
+                "#9c27b0",
+                "#009688"
+                ]
+            }]
+        }
+    });
+  }
+  function graf1(h, m, t){
+    var c = document.getElementById("lienzo2");
+    var chart = new Chart(c, {
+        type:"bar", 
+        data:{
+            labels:["Mujeres", "Hombres", "General"],
+            datasets:[{
+                label:"Alumnos",
+                data:[m, h, t],
+                backgroundColor:[
+                "#9c27b0",
+                "#009688",
+                "#7cb342"
+                ]
+            }]
+        },
+        options:{
+            scales:{
+                yAxes:[{
+                    ticks:{
+                        beginAtZero:true
+                    }
+                }]
+            }
+        }
+    });
+  }
 
   var buscar=()=>{
   	var bbb=document.getElementById("nombre");
@@ -143,10 +223,14 @@
         var registro = tabla(taskValue.matricula, taskValue.nombre, taskValue.edad, taskValue.sexo, taskValue.promedio);
         innertHTML("hombres", registro);
         cont++;
+        hom++;
         pro = pro + parseFloat(taskValue.promedio);
         res = pro/cont;
+        ph=res;
         document.getElementById("total").innerHTML = "El total de alumnos es: "+cont;
         document.getElementById("prom").innerHTML = "El promedio total es: "+res;
+        graf(hom, muj);
+        graf1(ph, pm, res);
     });
   }
 
@@ -157,10 +241,15 @@
         var registro = tabla1(taskValue.matricula, taskValue.nombre, taskValue.edad, taskValue.sexo, taskValue.promedio);
         innertHTML("mujeres", registro);
         cont++;
+        muj++;
         pro = pro + parseFloat(taskValue.promedio);
+        pro2 = pro2 + parseFloat(taskValue.promedio);
         res = pro/cont;
+        pm = pro2/muj; 
         document.getElementById("total").innerHTML = "El total de alumnos es: "+cont;
         document.getElementById("prom").innerHTML = "El promedio total es: "+res;
+        graf(hom, muj);
+        graf1(ph, pm, res);
     });
   }
 
@@ -321,8 +410,7 @@ function insertTask(){
         limpiar("edad", "");
         limpiar("sexo", "");
         limpiar("promedio", "");
-        alert("Guardado correctamente")
-    
+        alert("Guardado correctamente")  
 }
 
 function insertTask1(){
